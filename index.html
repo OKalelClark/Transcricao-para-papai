@@ -3,29 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tradutor Ininterrupto V7</title>
+    <title>Tradutor Conforto do Papai</title>
     <style>
         body { 
-            background-color: #000; color: #FFFF00; 
-            font-family: sans-serif; padding: 20px; margin: 0;
+            background-color: #000; /* Fundo preto puro */
+            color: #99E6FF; /* NOVO: Azul Celeste Clarinho (Suave) */
+            font-family: sans-serif; 
+            padding: 20px; margin: 0;
             padding-bottom: 300px;
         }
         #status { 
             position: fixed; top: 0; left: 0; width: 100%;
-            background: #222; color: #0f0; font-size: 14px;
-            padding: 10px; z-index: 1000;
+            background: #111; color: #0f0; font-size: 14px;
+            padding: 10px; z-index: 1000; border-bottom: 1px solid #333;
         }
         #container { margin-top: 60px; }
         .frase-final { 
-            font-size: 3.2rem; line-height: 1.1; 
-            margin-bottom: 25px; text-transform: uppercase;
-            border-left: 12px solid #FFFF00; padding-left: 15px;
+            font-size: 2.6rem; /* NOVO: Tamanho diminuído (de 3.2 para 2.6) */
+            line-height: 1.2; 
+            margin-bottom: 25px; 
+            text-transform: uppercase;
+            /* NOVO: Borda brilhante na esquerda (Azul combinando) */
+            border-left: 10px solid #00BFFF; 
+            padding-left: 18px;
+            display: block;
         }
         #btn-limpar {
             position: fixed; bottom: 20px; right: 20px;
-            width: 80px; height: 80px; background: red; 
+            width: 70px; height: 70px; 
+            background: #800000; /* NOVO: Vermelho Vinho (Menos brilhante) */
             color: white; border: none; border-radius: 50%;
-            font-weight: bold; z-index: 1001;
+            font-weight: bold; z-index: 1001; font-size: 12px;
+            opacity: 0.8; /* NOVO: Levemente transparente */
         }
     </style>
 </head>
@@ -41,17 +50,15 @@
         const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
         const recognition = new SpeechRecognition();
 
-        // CONFIGURAÇÃO "LIMPA"
         recognition.lang = 'pt-BR';
-        recognition.continuous = false; // Mudamos para falso para evitar o efeito escada
-        recognition.interimResults = false; // Só queremos o resultado final
+        recognition.continuous = false; // Mantemos falso para evitar o efeito escada
+        recognition.interimResults = false; 
 
         let appAtivo = false;
 
         recognition.onresult = (event) => {
             const fala = event.results[0][0].transcript;
             
-            // Cria o bloco de texto apenas quando a frase termina
             const bloco = document.createElement('div');
             bloco.className = 'frase-final';
             bloco.innerText = fala.trim();
@@ -60,7 +67,6 @@
             window.scrollTo(0, document.body.scrollHeight);
         };
 
-        // REINÍCIO IMEDIATO
         recognition.onend = () => {
             if (appAtivo) {
                 recognition.start();
@@ -69,7 +75,6 @@
 
         recognition.onerror = (event) => {
             if (event.error === 'no-speech') {
-                // Se não houver fala, ele apenas reinicia sem avisar erro
                 if (appAtivo) recognition.start();
             } else {
                 statusDiv.innerText = "ERRO: " + event.error;
